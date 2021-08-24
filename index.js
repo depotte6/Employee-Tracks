@@ -8,5 +8,6 @@ const app=express();
 
 
 
-app.listen(PORT, () => 
-    console.log(`Listening at http://localhost:${PORT}`));
+app.listen(PORT, () => {
+    return (`Listening at http://localhost:${PORT}`);
+});
