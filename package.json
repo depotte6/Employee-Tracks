@@ -1,0 +1,24 @@
+{
+  "name": "employee-tracks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/depotte6/Employee-Tracks.git"
+  },
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^8.1.2",
+    "mysql2": "^2.3.0"
+  },
+  "author": "Claire DePotter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/depotte6/Employee-Tracks/issues"
+  },
+  "homepage": "https://github.com/depotte6/Employee-Tracks#readme"
+}
