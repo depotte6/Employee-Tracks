@@ -2,7 +2,7 @@
   "name": "employee-tracks",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "npm start"
   },
@@ -14,7 +14,9 @@
     "console.table": "^0.10.0",
     "express": "^4.17.1",
     "inquirer": "^8.1.2",
-    "mysql2": "^2.3.0"
+    "mysql2": "^2.3.0",
+    "mysql2-promise": "^0.1.4",
+    "util": "^0.12.4"
   },
   "author": "Claire DePotter",
   "license": "ISC",
