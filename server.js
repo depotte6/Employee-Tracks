@@ -155,18 +155,18 @@ function menuPrompt() {
 
   function addARole() {
     console.log("ADD A ROLE:");
-    let query = `SELECT d.id, d.department_name, r.salary AS budget
-      FROM employee e
-      JOIN roles r
-      ON e.roles_id = r.id
-      LEFT JOIN department d
-      ON d.id = r.department_id
-      GROUP BY d.id, d.department_name`
+    let query = `SELECT department.id, department.department_name
+      FROM employee 
+      LEFT JOIN roles 
+        ON employee.roles_id = roles.id
+      LEFT JOIN department 
+        ON department.id = roles.department_id
+      GROUP BY department.id, department.department_name`
 
     db.query(query, function(err, res) {
       if(err) throw (err);
-      const chooseDepartment = res.map(({ id, name }) => ({
-        value: id, name: `${id} ${name}`
+      const chooseDepartment = res.map(({ id, department_name }) => ({
+        value: id, department_name: `${id} ${department_name}`
       }));
       console.table(res);
       promptAddARole(chooseDepartment);
@@ -261,4 +261,84 @@ function menuPrompt() {
                     });
       }
   };
-}
+
+  function updateEmployeeRole() {
+    employeeArray();
+  }
+    async function employeeArray() {
+      console.log("UPDATE AN EMPLOYEE:");
+
+      let query = `SELECT employee.id, employee.first_name, employee.last_name, roles.title, department.department_name 
+      AS department,
+      JOIN roles 
+        ON employee.roles_id = roles.id
+      JOIN department 
+      ON department.id = roles.department_id
+      JOIN employee`
+      
+    db.query(query, function(err, res) {
+        if (err) throw (err);
+
+      const chooseEmployee = res.map(({id, first_name, last_name}) => ({
+        value: id,
+        name: `${first_name} ${last_name}`
+      },
+      console.table(res)));
+      rolesArray(chooseEmployee);
+    })
+
+      function rolesArray(chooseEmployee) {
+        console.log("UPDATE A ROLE:");
+
+        let query = `SELECT roles.id, roles.title, roles.salary
+        FROM roles`
+        let chooseRoles;
+      }
+
+      db.query(query, function(err, res) {
+        if (err) throw (err);
+        chooseRoles = res.map(({id, title, salary}) => ({
+          value: id,
+          title: `${title}`,
+          salary: `${salary}`
+        }),
+    
+        console.table(res));
+        promptEmployeeRoles();
+      });
+
+        function promptEmployeeRoles(chooseEmployee, chooseRoles) {
+            inquirer
+              .prompt([
+                {
+                  type: "list",
+                  name: "employeeId",
+                  message: "WHICH EMPLOYEE WOULD YOU LIKE TO UPDATE?"
+                }, 
+                {
+                  type: "list",
+                  name: "roleId",
+                  message: "WHICH ROLE WOULD YOU LIKE TO UPDATE?"
+                },
+              ])
+              .then(function(answer) {
+                let query = `UPDATE employee SET roles_id = ? WHERE id = ?`
+
+                db.query(query,
+                  [
+                    answer.rolesId,
+                    answer.employeeId
+                  ],
+                  function(err, res) {
+                    if (err) throw (err);
+
+                    console.table(res);
+                    menuPrompt();
+                  }
+                );
+              });
+          }
+        }
+      }
+  
+
