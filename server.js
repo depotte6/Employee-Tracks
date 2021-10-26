@@ -16,7 +16,7 @@ app.listen(PORT, () => {
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Gunn@r123',
+    password: 'Oblina!23',
     database: 'tracking_db'
   },
   console.log(`You are connected to the tracking_db database.`)
@@ -138,7 +138,7 @@ function menuPrompt() {
             },
           ])
           .then(function(answer) {
-            let query = `INSERT INTO department SET?`
+            let query = `INSERT INTO department SET ?`
             db.query(query, 
               {
                 department_name: answer.department_name,
@@ -163,10 +163,10 @@ function menuPrompt() {
       GROUP BY department.id, department.department_name`
 
     db.query(query, function(err, res) {
-      if(err) throw (err);
+    
       const chooseDepartment = res.map(({ id, department_name }) => ({
         value: id, department_name: `${id} ${department_name}`
-      }));
+      }))
       console.table(res);
       promptAddARole(chooseDepartment);
       });
@@ -265,30 +265,28 @@ function menuPrompt() {
     console.log("UPDATE AN EMPLOYEE ROLE:");
     employeeChoices();
   }
-  async function employeeChoices() {
+  function employeeChoices() {
     let query = `SELECT employee.id, employee.roles_id, concat(employee.first_name, "", employee.last_name) AS empFullName, 
     roles.title, department.department_name AS department, roles.salary
     FROM employee 
     JOIN roles 
       ON employee.roles_id = roles.id
     JOIN department
-      ON department.id =roles.department_id`
-      //  JOIN roles
-     // ON employee.roles_id = roles.id `
-      //ON department.id = roles.department_id`
-    //let query = `SELECT employee.first_name, employee.last_name FROM employee`
+      ON department.id =roles.department_id
+      `
+    
     db.query(query, function(err, res) {
       if (err) throw (err);
 
-      let chooseEmployee = res.map(({id, first_name, last_name}) => ({
-        value: id,
+      let chooseEmployee = res.map(({id, roles_id, first_name, last_name}) => ({
+        value: first_name, last_name,
         name: `${first_name} ${last_name}`
       }));
       console.table("FROM NAME THING", (res))
       console.table(res);
       rolesChoices(chooseEmployee);
     })
-    await function rolesChoices(chooseEmployee) {
+    async function rolesChoices() {
       let query = `SELECT roles.id, roles.title, roles.salary,
       employee.roles_id, employee.id
       FROM employee
@@ -302,6 +300,11 @@ function menuPrompt() {
         value: id,
         salary: `${salary}`
       }));
+      let chooseEmployee = res.map(({ first_name, last_name}) => ({
+        value: first_name, last_name,
+        name: `${first_name} ${last_name}`
+      }))
+      console.table(chooseEmployee);
       console.log(res);
       console.table(res);
       promptUpdateEmp(chooseEmployee, chooseRoles);
@@ -325,8 +328,8 @@ function menuPrompt() {
       ])
 
       .then(function (answer) {
-        let query =`UPDATE employee SET roles_id = ? WHERE id = ?`
-        //let query = `UPDATE employee SET WHERE ?`;
+        let query =`UPDATE employee SET ?`
+      
         db.query(query, 
           [ answer.roleID,
             answer.employeeId
@@ -345,4 +348,4 @@ function menuPrompt() {
       console.table("GOODBYE!");
       process.exit();
   }
-}
+}}
